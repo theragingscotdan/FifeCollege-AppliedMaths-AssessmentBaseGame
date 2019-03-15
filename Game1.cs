@@ -70,10 +70,12 @@ namespace Assessment
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player.LoadModel(Content, "Ship");
             player.rotation = new Vector3(1.5f, 0f, 0f);
-            player.position.Y = 15;
-            player.scale = 2;
+            player.position.X = 0;
+            player.position.Y = 0;
+            player.position.Z = 0;
+            player.scale = 0.1f;
             rock.LoadModel(Content, "Meteor");
-            rock.scale = 0.015f;
+            rock.scale = 0.1f;
             rock.position = new Vector3(25, 60, -50);
             for (int c = 0; c < walls.Length; c++)
             {
