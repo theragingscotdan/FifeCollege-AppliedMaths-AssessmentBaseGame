@@ -17,6 +17,7 @@ namespace Assessment
     public class camera3d
     {
         public Vector3 position;
+        public Vector3 offset = Vector3.Zero;
         public Vector3 target;
         public Vector3 whichWayIsUp = Vector3.Up;
         public float fieldOfView = MathHelper.ToRadians(45);
@@ -86,6 +87,28 @@ namespace Assessment
                     // CODE FOR TASK 1 SHOULD BE ENTERED HERE
                     //
                     ///////////////////////////////////////////////////////////////////
+                    ///
+                    // world matrix
+
+                    // 1. Scale
+                    effect.World *= Matrix.CreateScale(scale);
+                    // 2. Rotation
+                    effect.World *= Matrix.CreateRotationX(rotation.X);
+                    effect.World *= Matrix.CreateRotationY(rotation.Y);
+                    effect.World *= Matrix.CreateRotationZ(rotation.Z);
+
+                    // 3. Translation/position
+                    effect.World *= Matrix.CreateTranslation(position);
+
+                    // view matrix
+                    effect.View = Matrix.CreateLookAt(cam.target + cam.offset, cam.target, Vector3.Up);
+
+                    // projection matrix
+                    //effect.Projection = Matrix.CreatePerspectiveFieldOfView(cam.FOV, cam.aspectRatio,
+                    //cam.nearPlane, cam.farPlane);
+                    effect.Projection = Matrix.CreateOrthographic(1600, 900, 1f, 10000f);
+
+
                     // the following effects are related to lighting and texture  settings, feel free to tweak them to see what happens.
                     effect.LightingEnabled = true;
                     effect.Alpha = Alpha; //  amount of transparency
