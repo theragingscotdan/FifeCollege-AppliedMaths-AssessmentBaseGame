@@ -56,6 +56,7 @@ namespace Assessment
             gamecam.whichWayIsUp = Vector3.Up;
             gamecam.nearPlane = 1f;
             gamecam.farPlane = 50000f;
+            gamecam.offset = new Vector3(100f, 20f, -10f);
 
             base.Initialize();
         }

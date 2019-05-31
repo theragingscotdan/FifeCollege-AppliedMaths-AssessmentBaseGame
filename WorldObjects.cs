@@ -104,9 +104,9 @@ namespace Assessment
                     effect.View = Matrix.CreateLookAt(cam.target + cam.offset, cam.target, Vector3.Up);
 
                     // projection matrix
-                    //effect.Projection = Matrix.CreatePerspectiveFieldOfView(cam.FOV, cam.aspectRatio,
-                    //cam.nearPlane, cam.farPlane);
-                    effect.Projection = Matrix.CreateOrthographic(1600, 900, 1f, 10000f);
+                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(cam.fieldOfView, cam.aspectRatio,
+                    cam.nearPlane, cam.farPlane);
+                    //effect.Projection = Matrix.CreateOrthographic(1600, 900, 1f, 10000f);
 
 
                     // the following effects are related to lighting and texture  settings, feel free to tweak them to see what happens.
