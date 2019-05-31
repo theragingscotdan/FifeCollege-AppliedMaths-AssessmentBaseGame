@@ -215,13 +215,59 @@ namespace Assessment
 
         private void ElasticCollision(basicCuboid w)
         {
-            player.velocity *= -1;
-            player.position = player.storedPos;
+            //player.velocity *= -1;
+            //player.position = player.storedPos;
             ///////////////////////////////////////////////////////////////////
             //
             // CODE FOR TASK 7 SHOULD BE ENTERED HERE
             //
             ///////////////////////////////////////////////////////////////////
+
+            // need the perpendicular vector to the face of the box we hit
+            // to do this, we need TWO vectors ON the face of the box we hit
+            Vector3 faceVector1;
+            Vector3 faceVector2;
+
+            // get the corners of the box we hit so we can calculate the face vectors
+            Vector3[] corners =  w.collisionbox.GetCorners();
+            // corners of the box faces that are perpendicular to the z axis (aka facing along the z axis)
+            // 0-3 is the near face, 4-7 is the far face
+            // Start upper left, upper right, then lower right, lower left clockwise
+
+            // move back our player to their previous position (so they arent inside the box)
+            player.position = player.storedPos;
+
+            // is the player's new position overlapping in the X direction
+            if ((player.hitBox.Min.X - player.velocity.X) > w.collisionbox.Max.X || (player.hitBox.Max.X-player.velocity.X) < w.collisionbox.Min.X)
+            {
+                // overlapping from right or left!
+                // line from back bottom right going to the front top right
+                faceVector1 = corners[1] - corners[6];
+                // line from back bottom right going to the front bottom right
+                faceVector2 = corners[2] - corners[6];
+
+            }
+            else
+             // if we are NOT overlapping right or left, we are overlapping front/back (z-axis)
+            {
+                // overlapping front or back!
+                // line from front top left going to the top right
+                faceVector1 = corners[1] - corners[0];
+                // line from front top left going to the bottom right
+                faceVector2 = corners[2] - corners[0];
+
+            }
+            // (we ignore the possibilty of a y direction
+
+            // get a cross product between these two vectors to define a normal perpendicular to the plan
+            Vector3 normal = Vector3.Cross(faceVector1, faceVector2);
+            // make it a unit vector (length 1)
+            normal.Normalize();
+
+            // use this normal vector to reflect the player's velocity
+            // this uses a dot product equation internally
+            player.velocity = Vector3.Reflect(player.velocity, normal);
+
         }
         ///////////////////////////////////////////////////////////////////
         //
