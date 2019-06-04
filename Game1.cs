@@ -278,6 +278,22 @@ namespace Assessment
         public Vector3 CubicInterpolation(Vector3 initialPos, Vector3 endPos, float
         time)
         {
+            float t = time / doorSequenceFinalTime;
+
+            // add the equation here
+
+            float p = -t * t * t + 2 * (t * t);
+
+            //Vector3 totalDistance = doorEndPoint - doorStartPoint;
+
+            // Vector3 distanceTravelled = totalDistance * p;
+
+            //Vector3 newPosition = doorStartPoint + distanceTravelled;
+
+
+            // return newPosition
+
+
             return new Vector3(0, 0, 0);
         }
 

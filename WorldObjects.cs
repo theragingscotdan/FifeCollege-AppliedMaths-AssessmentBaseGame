@@ -52,6 +52,8 @@ namespace Assessment
         public float scale = 1;
         public bool Lit = true;
         public Vector3 storedPos;
+        public Vector3 collisionOffset = Vector3.Zero;
+
         public BoundingBox hitBox
         {
             get
@@ -62,6 +64,14 @@ namespace Assessment
                 // CODE FOR TASK 3 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
+                b.Min = position + mesh.Meshes[0].BoundingSphere.Center + collisionOffset;
+
+                b.Min.X -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.X * scale; //.X;
+                b.Min.Y -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.Y * scale; //.Y;
+                b.Min.Z -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.Z * scale; //.Z;
+
+                //b.Max.X = b.Min.X + mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale * scale; //.X;
+
                 return b;
             }
         }
