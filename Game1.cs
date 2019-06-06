@@ -30,6 +30,15 @@ namespace Assessment
         basicCuboid[] walls = new basicCuboid[20];
         int doorSequenceTimer;
         int doorSequenceFinalTime = 2500;
+        //float timeStep = 0;
+
+
+        //public Vector3 position = Vector3.Zero;
+        public Vector3 positionOld = Vector3.Zero;
+        //public Vector3 velocity = Vector3.Zero;
+        public Vector3 velocityOld = Vector3.Zero;
+        public Vector3 accelerationOld = Vector3.Zero;
+
 
         public Game1()
         {
@@ -112,23 +121,39 @@ namespace Assessment
 
         private void MovePlayer(int dt)
         {
+            
             switch (currentIntegrationMethod)
             {
+
                 case IntegrationMethod.ForwardEuler:
                     //// This method is deprecated due to stability issues.
                     player.position += player.velocity * dt;
                     player.velocity += acceleration * dt;
 
-                    break;
+                    break; 
 
                 ///////////////////////////////////////////////////////////////////
                 //
                 // CODE FOR TASK 2 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
+                
                 case IntegrationMethod.LeapFrog:
+                    Vector3 velocityHalf = velocityOld + accelerationOld * dt * 0.5f;
+
+                    player.position = positionOld + velocityHalf * dt;
+
+                    player.velocity = velocityHalf + acceleration * dt * 0.5f;
+
+                    player.velocity *= 0.9f;
+
+                    accelerationOld = acceleration;
+                    velocityOld = player.velocity;
+                    positionOld = player.position;
                     break;
                 case IntegrationMethod.Verlet:
+                    
+                    
                     break;
             }
         }
@@ -168,6 +193,8 @@ namespace Assessment
             // camera follow
             gamecam.position = new Vector3(50, 50, 50) + player.position;
             gamecam.target = player.position;
+            // added time step
+            //timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds;
             MovePlayer(dt);
             foreach (basicCuboid WallSegment in walls)
             {
@@ -208,6 +235,8 @@ namespace Assessment
                 // CODE FOR TASK 5 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
+                doorSequenceTimer += (int)((float)gameTime.TotalGameTime.TotalSeconds);
+                newPos = CubicInterpolation(doorStartPoint, doorEndPoint, doorSequenceTimer);
             }
 
 
@@ -278,23 +307,24 @@ namespace Assessment
         public Vector3 CubicInterpolation(Vector3 initialPos, Vector3 endPos, float
         time)
         {
-            float t = time / doorSequenceFinalTime;
+           float t = doorSequenceTimer / doorSequenceFinalTime;
+           
 
             // add the equation here
 
-            float p = -t * t * t + 2 * (t * t);
+              float p = -t * t * t + 2 * (t * t);
 
-            //Vector3 totalDistance = doorEndPoint - doorStartPoint;
+            Vector3 totalDistance = endPos - initialPos;
 
-            // Vector3 distanceTravelled = totalDistance * p;
+            Vector3 distanceTravelled = totalDistance * p;
 
-            //Vector3 newPosition = doorStartPoint + distanceTravelled;
-
-
-            // return newPosition
+            Vector3 newPosition = initialPos + distanceTravelled;
 
 
-            return new Vector3(0, 0, 0);
+            return newPosition;
+
+
+            //return new Vector3(0, 0, 0);
         }
 
         /// <summary>

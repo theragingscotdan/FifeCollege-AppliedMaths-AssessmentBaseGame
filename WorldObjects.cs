@@ -52,7 +52,12 @@ namespace Assessment
         public float scale = 1;
         public bool Lit = true;
         public Vector3 storedPos;
-        public Vector3 collisionOffset = Vector3.Zero;
+        /*public Vector3 positionOld = Vector3.Zero;
+        //public Vector3 velocity = Vector3.Zero;
+        public Vector3 velocityOld = Vector3.Zero;
+        public Vector3 accelerationOld = Vector3.Zero; */
+
+
 
         public BoundingBox hitBox
         {
