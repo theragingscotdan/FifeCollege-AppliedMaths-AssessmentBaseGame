@@ -64,13 +64,18 @@ namespace Assessment
                 // CODE FOR TASK 3 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
-                b.Min = position + mesh.Meshes[0].BoundingSphere.Center + collisionOffset;
+                b.Min = position + mesh.Meshes[0].BoundingSphere.Center;// + collisionOffset;
 
                 b.Min.X -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.X * scale; //.X;
                 b.Min.Y -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.Y * scale; //.Y;
                 b.Min.Z -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.Z * scale; //.Z;
 
-                //b.Max.X = b.Min.X + mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale * scale; //.X;
+                b.Max.X = b.Min.X + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.X * scale); //.X;
+                b.Max.Y = b.Min.Y + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.Y * scale);
+                b.Max.Z = b.Min.Z + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.Z * scale);
+
+
+
 
                 return b;
             }
