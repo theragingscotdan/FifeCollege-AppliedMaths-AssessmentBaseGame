@@ -52,10 +52,10 @@ namespace Assessment
         public float scale = 1;
         public bool Lit = true;
         public Vector3 storedPos;
-        /*public Vector3 positionOld = Vector3.Zero;
-        //public Vector3 velocity = Vector3.Zero;
-        public Vector3 velocityOld = Vector3.Zero;
-        public Vector3 accelerationOld = Vector3.Zero; */
+        //public Vector3 positionOld = Vector3.Zero;
+        ////public Vector3 velocity = Vector3.Zero;
+        //public Vector3 velocityOld = Vector3.Zero;
+        //public Vector3 accelerationOld = Vector3.Zero; 
 
 
 
@@ -85,6 +85,17 @@ namespace Assessment
                 return b;
             }
         }
+
+        /*public bool DetectCollision(object3d otherObject)
+        {
+            bool collided = false;
+
+            
+
+
+            return collided;
+        } */
+
         internal void LoadModel(ContentManager content, string modelName)
         {
             mesh = content.Load<Model>(modelName);
@@ -123,6 +134,7 @@ namespace Assessment
                     // view matrix
                     effect.View = Matrix.CreateLookAt(cam.target + cam.offset, cam.target, Vector3.Up);
 
+                    
                     // projection matrix
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(cam.fieldOfView, cam.aspectRatio,
                     cam.nearPlane, cam.farPlane);
