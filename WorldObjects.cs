@@ -49,13 +49,15 @@ namespace Assessment
         public Matrix[] transforms;
         public float Alpha = 1;
         public Vector3 collisionScale = Vector3.One;
+        public Vector3 collisionOffset = Vector3.Zero;
         public float scale = 1;
         public bool Lit = true;
         public Vector3 storedPos;
-        //public Vector3 positionOld = Vector3.Zero;
-        ////public Vector3 velocity = Vector3.Zero;
-        //public Vector3 velocityOld = Vector3.Zero;
-        //public Vector3 accelerationOld = Vector3.Zero; 
+
+        public Vector3 positionOld = Vector3.Zero;
+        //public Vector3 velocity = Vector3.Zero;
+        public Vector3 velocityOld = Vector3.Zero;
+        public Vector3 accelerationOld = Vector3.Zero; 
 
 
 
@@ -69,7 +71,7 @@ namespace Assessment
                 // CODE FOR TASK 3 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
-                b.Min = position + mesh.Meshes[0].BoundingSphere.Center;// + collisionOffset;
+                b.Min = position + mesh.Meshes[0].BoundingSphere.Center + collisionOffset;
 
                 b.Min.X -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.X * scale; //.X;
                 b.Min.Y -= mesh.Meshes[0].BoundingSphere.Radius * collisionScale.Y * scale; //.Y;
@@ -78,9 +80,7 @@ namespace Assessment
                 b.Max.X = b.Min.X + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.X * scale); //.X;
                 b.Max.Y = b.Min.Y + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.Y * scale);
                 b.Max.Z = b.Min.Z + (mesh.Meshes[0].BoundingSphere.Radius * 2 * collisionScale.Z * scale);
-
-
-
+                
 
                 return b;
             }
@@ -132,7 +132,7 @@ namespace Assessment
                     effect.World *= Matrix.CreateTranslation(position);
 
                     // view matrix
-                    effect.View = Matrix.CreateLookAt(cam.target + cam.offset, cam.target, Vector3.Up);
+                    effect.View = Matrix.CreateLookAt(cam.position, cam.target, Vector3.Up);
 
                     
                     // projection matrix

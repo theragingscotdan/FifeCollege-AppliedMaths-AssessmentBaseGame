@@ -31,11 +31,11 @@ namespace Assessment
         int doorSequenceTimer;
         int doorSequenceFinalTime = 2500;
         //float timeStep = 0;
+        int rockStart = 0;
 
-
-        //public Vector3 position = Vector3.Zero;
+        public Vector3 position = Vector3.Zero;
         public Vector3 positionOld = Vector3.Zero;
-        //public Vector3 velocity = Vector3.Zero;
+        public Vector3 velocity = Vector3.Zero;
         public Vector3 velocityOld = Vector3.Zero;
         public Vector3 accelerationOld = Vector3.Zero;
 
@@ -84,6 +84,7 @@ namespace Assessment
             player.position.Y = 0;
             player.position.Z = 0;
             player.scale = 0.1f;
+            //player.collisionOffset = new Vector3(0, 100.0f, 0);
             rock.LoadModel(Content, "Meteor");
             rock.scale = 0.1f;
             rock.position = new Vector3(25, 60, -50);
@@ -150,14 +151,41 @@ namespace Assessment
                     accelerationOld = acceleration;
                     velocityOld = player.velocity;
                     positionOld = player.position;
+
+                    //Vector3 velocityHalf = player.velocityOld + player.accelerationOld * dt * 0.5f;
+
+                    //player.position = player.positionOld + velocityHalf * dt;
+
+                    //player.velocity = velocityHalf + acceleration * dt * 0.5f;
+
+                    //player.velocity *= 0.9f;
+
+                    //player.accelerationOld = acceleration;
+                    //player.velocityOld = player.velocity;
+                    //player.positionOld = player.position;
+
+
+
+
+                    //position = positionOld + velocityHalf * dt;
+
+                    //velocity = velocityHalf + acceleration * dt * 0.5f;
+
+                    //velocity *= 0.9f;
+
+                    //accelerationOld = acceleration;
+                    //velocityOld = velocity;
+                    //positionOld = position;
                     break;
+                   
+
 
                 case IntegrationMethod.ImplicitEuler:
 
                     //player.velocity *= 0.9f;
                     player.velocity = velocityOld + acceleration * dt;
 
-                    // use velocity from THIS frame to calculate position
+                   // use velocity from THIS frame to calculate position
                     player.position = positionOld + player.velocity * dt;
 
                     player.velocity *= 0.9f;
@@ -165,7 +193,18 @@ namespace Assessment
                     velocityOld = player.velocity;
                     positionOld = player.position;
 
-                   
+                    ////player.velocity *= 0.9f;
+                    //velocity = velocityOld + acceleration * dt;
+
+                    //// use velocity from THIS frame to calculate position
+                    //position = positionOld + velocity * dt;
+
+                    //velocity *= 0.9f;
+
+                    //velocityOld = velocity;
+                    //positionOld = position;
+
+
 
                     break;
             }
@@ -223,16 +262,34 @@ namespace Assessment
             if (player.hitBox.Intersects(TriggerBoxRockFall) && !rockFalling)
             {
                 rockFalling = true;
-                rock.velocity = new Vector3(0, 0.2f, 0);
+                //rock.velocity = new Vector3(0, 0.2f, 0);
+                rockStart += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                // assign rock fall start time
             }
             if (rockFalling)
             {
-                Vector3 gravity = new Vector3(0, -0.01f, 0);
+                Vector3 gravity = new Vector3(0, -100.0f, 0);
                 ///////////////////////////////////////////////////////////////////
                 //
                 // CODE FOR TASK 4 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
+                
+                // calculate time since rocks started falling
+                // remember ot add a variable to keep track of when rock stated falling
+                // add 
+                // calculate rock's new y position using the derived equation
+                // stop when you reach the ground (0)
+                if (rockStart != 0.0f)
+                {
+                    float timeSinceFall = (float)gameTime.TotalGameTime.TotalSeconds - rockStart;
+                    // rock.position.Y = (gravity * time * time) / 2
+                    // if (rock.position.Y < 0f)
+                   // {
+
+                   // }
+                }
+                
             }
             if (player.hitBox.Intersects(TriggerBoxDoorOpen))
             {
@@ -248,8 +305,10 @@ namespace Assessment
                 // CODE FOR TASK 5 SHOULD BE ENTERED HERE
                 //
                 ///////////////////////////////////////////////////////////////////
-                doorSequenceTimer += (int)((float)gameTime.TotalGameTime.TotalSeconds);
-                newPos = CubicInterpolation(doorStartPoint, doorEndPoint, doorSequenceTimer);
+                //doorSequenceTimer += (int)((float)gameTime.TotalGameTime.TotalMiliSeconds);
+                doorSequenceTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                //newPos = CubicInterpolation(doorStartPoint, doorEndPoint, doorSequenceTimer, );
             }
 
 
@@ -310,6 +369,7 @@ namespace Assessment
             // use this normal vector to reflect the player's velocity
             // this uses a dot product equation internally
             player.velocity = Vector3.Reflect(player.velocity, normal);
+            velocityOld = player.velocity;
 
         }
         ///////////////////////////////////////////////////////////////////
@@ -318,10 +378,11 @@ namespace Assessment
         //
         ///////////////////////////////////////////////////////////////////
         public Vector3 CubicInterpolation(Vector3 initialPos, Vector3 endPos, float
-        time)
+        time, float distance)
         {
-           float t = doorSequenceTimer / doorSequenceFinalTime;
-           
+            //float t = doorSequenceTimer / doorSequenceFinalTime;
+            //float t = time / doorSequenceFinalTime;
+            float t = distance / time;
 
             // add the equation here
 
