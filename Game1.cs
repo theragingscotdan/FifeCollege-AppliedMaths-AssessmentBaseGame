@@ -200,8 +200,8 @@ namespace Assessment
             player.velocity *= 0.9f; // friction
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                acceleration.X = (float)Math.Sin(player.rotation.Y) * 0.001f;
-                acceleration.Z = (float)Math.Cos(player.rotation.Y) * 0.001f;
+                acceleration.X = (float)Math.Sin(player.rotation.Y + Math.PI) * 0.001f;
+                acceleration.Z = (float)Math.Cos(player.rotation.Y + Math.PI) * 0.001f;
             }
             // camera follow
             gamecam.position = new Vector3(50, 50, 50) + player.position;
@@ -281,7 +281,7 @@ namespace Assessment
             player.position = player.storedPos;
 
             // is the player's new position overlapping in the X direction
-            if ((player.hitBox.Min.X - player.velocity.X) > w.collisionbox.Max.X || (player.hitBox.Max.X-player.velocity.X) < w.collisionbox.Min.X)
+            if ((player.hitBox.Min.X - player.velocity.X) > w.collisionbox.Max.X || (player.hitBox.Max.X - player.velocity.X) > w.collisionbox.Min.X)
             {
                 // overlapping from right or left!
                 // line from back bottom right going to the front top right
@@ -320,7 +320,8 @@ namespace Assessment
         public Vector3 CubicInterpolation(Vector3 initialPos, Vector3 endPos, float
         time)
         {
-           float t = doorSequenceTimer / doorSequenceFinalTime;
+            float t = doorSequenceTimer / doorSequenceFinalTime;
+            //float t = distance / time;
            
 
             // add the equation here
