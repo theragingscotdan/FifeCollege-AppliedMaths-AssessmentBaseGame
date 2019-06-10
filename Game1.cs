@@ -283,11 +283,13 @@ namespace Assessment
                 if (rockStart != 0.0f)
                 {
                     float timeSinceFall = (float)gameTime.TotalGameTime.TotalSeconds - rockStart;
-                    // rock.position.Y = (gravity * time * time) / 2
-                    // if (rock.position.Y < 0f)
-                   // {
+                    rock.position.Y = (gravity.Y * timeSinceFall * timeSinceFall) / 2.0f + 1;
+                     if (rock.position.Y < 0f)
+                   {
+                        rock.position.Y = 0;
+                        rockStart = 0;
 
-                   // }
+                   }
                 }
                 
             }
