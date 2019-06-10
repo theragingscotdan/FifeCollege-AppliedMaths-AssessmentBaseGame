@@ -132,9 +132,10 @@ namespace Assessment
                     effect.World *= Matrix.CreateTranslation(position);
 
                     // view matrix
+
                     effect.View = Matrix.CreateLookAt(cam.position, cam.target, Vector3.Up);
 
-                    
+                                        
                     // projection matrix
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(cam.fieldOfView, cam.aspectRatio,
                     cam.nearPlane, cam.farPlane);
