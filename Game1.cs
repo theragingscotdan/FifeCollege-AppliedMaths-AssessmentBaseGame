@@ -242,6 +242,8 @@ namespace Assessment
                 rock.velocity = new Vector3(0, 0.0f, 0);
                 rockStart += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
                 // assign rock fall start time
+
+
             }
             if (rockFalling && position.Y >= 0)
             {
