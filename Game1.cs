@@ -118,7 +118,7 @@ namespace Assessment
         }
 
         public enum IntegrationMethod { ForwardEuler, LeapFrog, ImplicitEuler };
-        IntegrationMethod currentIntegrationMethod = IntegrationMethod.ImplicitEuler;
+        IntegrationMethod currentIntegrationMethod = IntegrationMethod.ForwardEuler;
 
         private void MovePlayer(int dt)
         {
@@ -152,30 +152,7 @@ namespace Assessment
                     velocityOld = player.velocity;
                     positionOld = player.position;
 
-                    //Vector3 velocityHalf = player.velocityOld + player.accelerationOld * dt * 0.5f;
-
-                    //player.position = player.positionOld + velocityHalf * dt;
-
-                    //player.velocity = velocityHalf + acceleration * dt * 0.5f;
-
-                    //player.velocity *= 0.9f;
-
-                    //player.accelerationOld = acceleration;
-                    //player.velocityOld = player.velocity;
-                    //player.positionOld = player.position;
-
-
-
-
-                    //position = positionOld + velocityHalf * dt;
-
-                    //velocity = velocityHalf + acceleration * dt * 0.5f;
-
-                    //velocity *= 0.9f;
-
-                    //accelerationOld = acceleration;
-                    //velocityOld = velocity;
-                    //positionOld = position;
+                   
                     break;
                    
 
@@ -262,13 +239,13 @@ namespace Assessment
             if (player.hitBox.Intersects(TriggerBoxRockFall) && !rockFalling)
             {
                 rockFalling = true;
-                //rock.velocity = new Vector3(0, 0.2f, 0);
+                rock.velocity = new Vector3(0, 0.0f, 0);
                 rockStart += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
                 // assign rock fall start time
             }
-            if (rockFalling)
+            if (rockFalling && position.Y >= 0)
             {
-                Vector3 gravity = new Vector3(0, -100.0f, 0);
+                Vector3 gravity = new Vector3(0, 0.1f, 0);
                 ///////////////////////////////////////////////////////////////////
                 //
                 // CODE FOR TASK 4 SHOULD BE ENTERED HERE
@@ -282,14 +259,15 @@ namespace Assessment
                 // stop when you reach the ground (0)
                 if (rockStart != 0.0f)
                 {
-                    float timeSinceFall = (float)gameTime.TotalGameTime.TotalSeconds - rockStart;
-                    rock.position.Y = (gravity.Y * timeSinceFall * timeSinceFall) / 2.0f + 1;
-                     if (rock.position.Y < 0f)
+                   // float timeSinceFall = (float)gameTime.TotalGameTime.TotalSeconds - rockStart;
+                    rock.position.Y = gravity.Y * dt * dt / 2.0f + rock.velocity.Y * dt;
+                    //rock.position.Y = gravity.Y * timeSinceFall * timeSinceFall / 2.0f + rockStart;
+                    /* if (rock.position.Y < 0f)
                    {
                         rock.position.Y = 0;
                         rockStart = 0;
 
-                   }
+                   } */
                 }
                 
             }
@@ -308,9 +286,16 @@ namespace Assessment
                 //
                 ///////////////////////////////////////////////////////////////////
                 //doorSequenceTimer += (int)((float)gameTime.TotalGameTime.TotalMiliSeconds);
-                doorSequenceTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                doorSequenceTimer += gameTime.ElapsedGameTime.Milliseconds;
 
-                //newPos = CubicInterpolation(doorStartPoint, doorEndPoint, doorSequenceTimer, );
+                if (doorSequenceTimer >= doorSequenceFinalTime)
+                {
+                    // reset timer
+                    doorSequenceTimer = doorSequenceFinalTime;
+                }
+
+                newPos = CubicInterpolation(doorStartPoint, doorEndPoint, (float)doorSequenceTimer, (float)doorSequenceFinalTime);
+                door.SetUpVertices(newPos);
             }
 
 
@@ -384,8 +369,8 @@ namespace Assessment
         {
 
             //float t = doorSequenceTimer / doorSequenceFinalTime;
-            //float t = time / doorSequenceFinalTime;
-            float t = distance / time;
+            float t = time / distance;
+            //float t = distance / time;
 
             //float t = doorSequenceTimer / doorSequenceFinalTime;
             //float t = distance / time;
