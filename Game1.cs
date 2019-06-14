@@ -31,7 +31,9 @@ namespace Assessment
         int doorSequenceTimer;
         int doorSequenceFinalTime = 2500;
         //float timeStep = 0;
-        int rockStart = 0;
+        double rockStart = 0;
+        float timeSinceFall = 0;
+        float rockStartLocation = 0.0f;
 
         public Vector3 position = Vector3.Zero;
         public Vector3 positionOld = Vector3.Zero;
@@ -170,18 +172,7 @@ namespace Assessment
                     velocityOld = player.velocity;
                     positionOld = player.position;
 
-                    ////player.velocity *= 0.9f;
-                    //velocity = velocityOld + acceleration * dt;
-
-                    //// use velocity from THIS frame to calculate position
-                    //position = positionOld + velocity * dt;
-
-                    //velocity *= 0.9f;
-
-                    //velocityOld = velocity;
-                    //positionOld = position;
-
-
+                    
 
                     break;
             }
@@ -239,15 +230,17 @@ namespace Assessment
             if (player.hitBox.Intersects(TriggerBoxRockFall) && !rockFalling)
             {
                 rockFalling = true;
-                rock.velocity = new Vector3(0, 0.0f, 0);
-                rockStart += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                //rock.velocity = new Vector3(0, 0.0f, 0);
+                rockStart = gameTime.ElapsedGameTime.TotalSeconds;
+                rockStartLocation = rock.position.Y;
+                 
                 // assign rock fall start time
 
 
             }
-            if (rockFalling && position.Y >= 0)
+            if (rockFalling)
             {
-                Vector3 gravity = new Vector3(0, 0.1f, 0);
+                Vector3 gravity = new Vector3(0, -100.0f, 0);
                 ///////////////////////////////////////////////////////////////////
                 //
                 // CODE FOR TASK 4 SHOULD BE ENTERED HERE
@@ -261,15 +254,17 @@ namespace Assessment
                 // stop when you reach the ground (0)
                 if (rockStart != 0.0f)
                 {
-                   // float timeSinceFall = (float)gameTime.TotalGameTime.TotalSeconds - rockStart;
-                    rock.position.Y = gravity.Y * dt * dt / 2.0f + rock.velocity.Y * dt;
-                    //rock.position.Y = gravity.Y * timeSinceFall * timeSinceFall / 2.0f + rockStart;
-                    /* if (rock.position.Y < 0f)
+                    //float timeSinceFall = (float)(gameTime.TotalGameTime.TotalSeconds - rockStart);
+                    timeSinceFall += dt / 1000.0f;
+                    rock.position.Y = (gravity.Y/2) * timeSinceFall * timeSinceFall + rockStartLocation;
+                    
+                     if (rock.position.Y < 0f)
                    {
+                        //rock.position.Y = 0;
                         rock.position.Y = 0;
-                        rockStart = 0;
+                        //rockStart = 0;
 
-                   } */
+                   } 
                 }
                 
             }
@@ -381,7 +376,8 @@ namespace Assessment
 
             // add the equation here
 
-              float p = -t * t * t + 2 * (t * t);
+            // -2t^3 + 3t^2
+              float p = (-2) * t * t * t + 3 * (t * t);
 
             Vector3 totalDistance = endPos - initialPos;
 
